@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚡</text></svg>">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Solana Memecoin Creator</title>
@@ -305,7 +306,7 @@ input[type="number"],
   <header>
     <div class="logo">⚡ SPEED</div>
     <div class="header-buttons">
-      <button class="button" onclick="connectPhantom()">Connect Wallet</button>
+      <button class="button" id="connectBtn" onclick="connectPhantom()">Connect Wallet</button>
       <button class="button" onclick="toggleMode()">Toggle Mode</button>
     </div>
   </header>
@@ -447,6 +448,7 @@ input[type="number"],
           playClickSound();
       const resp = await provider.connect();
           showNotification(`Connected: ${resp.publicKey.toString()}`);
+          document.getElementById('connectBtn').textContent = `${resp.publicKey.toString().slice(0, 6)}...${resp.publicKey.toString().slice(-4)}`;
           walletConnected = true;
           document.getElementById('launchBtn').disabled = false;
         } catch (err) {
