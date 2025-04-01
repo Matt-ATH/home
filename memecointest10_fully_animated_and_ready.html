@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Solana Memecoin Creator</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #7a3cff;
+      --bg-light: #f8f9fc;
+      --bg-dark: #0a0a0a;
+      --card-dark: #1a1a1a;
+      --card-light: #ffffff;
+      --text-light: #1a202c;
+      --text-dark: #eaeaea;
+      --gray: #ccc;
+      --border-radius: 20px;
+      --input-bg-light: #f1f1f1;
+      --input-bg-dark: #121212;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      background-color: var(--bg-dark);
+      color: var(--text-dark);
+      transition: background 0.3s, color 0.3s;
+    }
+
+    body.light-mode {
+      background-color: var(--bg-light);
+      color: var(--text-light);
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.5rem 2rem;
+    }
+
+    .logo {
+      font-size: 1.5rem;
+      font-weight: 700;
+    }
+
+    .header-buttons {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .button {
+      padding: 0.5rem 1rem;
+      border-radius: 12px;
+      border: none;
+      background-color: var(--primary);
+      color: white;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .wrapper {
+      display: flex;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    .card {
+      background-color: var(--card-dark);
+      border-radius: var(--border-radius);
+      padding: 2rem;
+      max-width: 1000px;
+      width: 100%;
+      box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
+    }
+
+    body.light-mode .card {
+  background-color: var(--card-light);
+  color: var(--text-light);
+}
+body.light-mode .launch-button {
+  background-color: black;
+  color: white;
+}
+      background-color: var(--card-light);
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 1rem;
+      font-size: 2rem;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+    }
+
+    label {
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    textarea {
+      padding: 0.75rem 1rem;
+      border-radius: 12px;
+      border: 1px solid var(--gray);
+      font-size: 1rem;
+      background-color: var(--input-bg-dark);
+      color: inherit;
+    }
+
+    body.light-mode input,
+    body.light-mode textarea {
+      background-color: var(--input-bg-light);
+      color: var(--text-light);
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    input[type="file"] {
+      padding: 0.5rem;
+      border: 1px dashed var(--gray);
+      border-radius: 12px;
+      background-color: transparent;
+      color: inherit;
+    }
+
+    .switches {
+      margin-top: 2rem;
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .switch {
+      padding: 1rem;
+      background: #222;
+      border-radius: 16px;
+      flex: 1;
+      min-width: 150px;
+      text-align: center;
+      font-weight: 500;
+      transition: all 0.2s;
+      cursor: pointer;
+      border: 2px solid transparent;
+    }
+
+    body.light-mode .switch {
+      background: #eee;
+    }
+
+    .switch.active {
+      border-color: var(--primary);
+      background-color: #2e2e2e;
+    }
+
+    body.light-mode .switch.active {
+      background-color: #ddd;
+    }
+
+    .switch span {
+      display: block;
+      font-size: 0.8rem;
+      margin-top: 0.5rem;
+      color: #bbb;
+    }
+
+    .optional-block {
+      margin-top: 2rem;
+    }
+
+    .toggle-fields {
+      margin-top: 1rem;
+      display: none;
+    }
+
+    .toggle-fields.active {
+      display: block;
+    }
+
+    .launch-button {
+  background-color: white;
+  color: black;
+
+      display: block;
+      margin: 2rem auto 0 auto;
+      padding: 1rem 2rem;
+      background-color: white;
+      color: black;
+      border: none;
+      border-radius: 9999px;
+      font-weight: 700;
+      font-size: 1.1rem;
+      cursor: pointer;
+    }
+
+    .launch-button:disabled {
+      background-color: #888;
+      cursor: not-allowed;
+    }
+
+    .total-fee {
+      text-align: center;
+      margin-top: 0.5rem;
+      font-size: 0.9rem;
+      color: #aaa;
+    }
+
+.upload-container {
+  border: 2px dashed var(--gray);
+  border-radius: 12px;
+  padding: 1rem;
+  text-align: center;
+  background-color: var(--input-bg-dark);
+  cursor: pointer;
+  transition: background 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 150px;
+}
+body.light-mode .upload-container {
+  background-color: var(--input-bg-light);
+}
+.upload-container:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+.upload-container img {
+  max-height: 100px;
+  max-width: 100%;
+  margin-top: 0.5rem;
+  border-radius: 8px;
+}
+.upload-container input {
+  display: none;
+}
+
+  
+@keyframes slideFadeIn {
+  0% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+@keyframes slideFadeOut {
+  0% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(20px);
+  }
+}
+    
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.form-group,
+.switch,
+.optional-block,
+.launch-button,
+textarea,
+input[type="text"],
+input[type="number"],
+.upload-container {
+  animation: fadeInUp 0.4s ease both;
+}
+
+</style>
+
+</head>
+<body>
+  <header>
+    <div class="logo">⚡ SPEED</div>
+    <div class="header-buttons">
+      <button class="button" onclick="connectPhantom()">Connect Wallet</button>
+      <button class="button" onclick="toggleMode()">Toggle Mode</button>
+    </div>
+  </header>
+
+  <div class="wrapper">
+    <div class="card">
+      <h1>Solana Token Creator</h1>
+      <form>
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Token Name</label>
+            <input type="text" placeholder="Ex: Rizz Coin" />
+          </div>
+          <div class="form-group">
+            <label>Token Symbol</label>
+            <input type="text" placeholder="Ex: RIZZ" />
+          </div>
+          <div class="form-group">
+            <label>Decimals</label>
+            <input type="number" placeholder="e.g. 6" />
+          </div>
+          <div class="form-group">
+            <label>Supply</label>
+            <input type="number" placeholder="e.g. 1000000" />
+          </div>
+          <div class="form-group">
+  <label>Token Logo</label>
+  <label class="upload-container" id="upload-label">
+    <span id="upload-text">⬆️ Upload Image</span>
+    <input type="file" id="imageInput" accept="image/*" onchange="previewImage(event)">
+    <img id="preview" style="display:none;" />
+  </label>
+</div>
+          <div class="form-group">
+            <label>Description</label>
+            <textarea placeholder="Describe your token..." style="height: 150px;"></textarea>
+          </div>
+        </div>
+
+        <div class="switches">
+          <div class="switch active" onclick="toggleSwitch(this)">
+            Revoke Freeze
+            <span>+0.1 SOL</span>
+          </div>
+          <div class="switch" onclick="toggleSwitch(this)">
+            Revoke Mint
+            <span>+0.1 SOL</span>
+          </div>
+          <div class="switch" onclick="toggleSwitch(this)">
+            Revoke Update
+            <span>+0.1 SOL</span>
+          </div>
+        </div>
+
+        <div class="optional-block">
+          <div class="switch" onclick="toggleSwitch(this); toggleField('creator-fields')">
+            Creator Info (Optional)
+            <span>+0.1 SOL</span>
+          </div>
+          <div id="creator-fields" class="toggle-fields">
+            <div class="form-grid">
+              <div class="form-group">
+                <label>Creator's Name</label>
+                <input type="text" placeholder="Ex: Donald Trump" />
+              </div>
+              <div class="form-group">
+                <label>Creator's Website</label>
+                <input type="text" placeholder="https://www.donaldjtrump.com" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="optional-block">
+          <div class="switch" onclick="toggleSwitch(this); toggleField('social-fields')">
+            Add Social Links & Tags
+            <span>+0.1 SOL</span>
+          </div>
+          <div id="social-fields" class="toggle-fields">
+            <div class="form-group" style="margin-bottom: 2rem;">
+              <label>Telegram Link</label>
+              <input type="text" placeholder="https://t.me/yourchannel" />
+            </div>
+            <div class="form-group" style="margin-bottom: 2rem;">
+              <label>Twitter or X Link</label>
+              <input type="text" placeholder="https://x.com/yourhandle" />
+            </div>
+            <div class="form-group" style="margin-bottom: 2rem;">
+              <label>Website Link</label>
+              <input type="text" placeholder="https://yourproject.com" />
+            </div>
+          </div>
+        </div>
+
+        <button type="button" id="launchBtn" class="launch-button">Launch Token</button>
+        <div class="total-fee">Total Fees: <span id="fee-display">0.1 SOL</span></div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    let walletConnected = false;
+
+    function toggleMode() {
+      document.body.classList.toggle('light-mode');
+    }
+
+    function toggleSwitch(el) {
+      el.classList.toggle('active');
+      ensureAtLeastOneSelected();
+      updateFee();
+    }
+
+    function toggleField(id) {
+      document.getElementById(id).classList.toggle('active');
+    }
+
+    function ensureAtLeastOneSelected() {
+      const switches = document.querySelectorAll('.switch');
+      const actives = Array.from(switches).filter(sw => sw.classList.contains('active'));
+      if (actives.length === 0) {
+        switches[0].classList.add('active');
+      }
+    }
+
+    function updateFee() {
+      const switches = document.querySelectorAll('.switch');
+      let count = 0;
+      switches.forEach(sw => {
+        if (sw.classList.contains('active')) count++;
+      });
+      document.getElementById('fee-display').textContent = (count * 0.1).toFixed(1) + ' SOL';
+    }
+
+    async function connectPhantom() {
+      const provider = window.phantom?.solana;
+      if (provider?.isPhantom) {
+        try {
+          playClickSound();
+      const resp = await provider.connect();
+          showNotification(`Connected: ${resp.publicKey.toString()}`);
+          walletConnected = true;
+          document.getElementById('launchBtn').disabled = false;
+        } catch (err) {
+          showNotification('Wallet connection rejected');
+        }
+      } else {
+        showNotification('Phantom Wallet not found')
+      }
+    }
+  
+function previewImage(event) {
+  const file = event.target.files[0];
+  const reader = new FileReader();
+  const preview = document.getElementById('preview');
+  const text = document.getElementById('upload-text');
+  reader.onload = function(e) {
+    preview.src = e.target.result;
+    preview.style.display = 'block';
+    text.style.display = 'none';
+  };
+  if (file) reader.readAsDataURL(file);
+}
+
+
+document.getElementById('launchBtn').addEventListener('click', function() {
+  if (!walletConnected) {
+    
+    return;
+  }
+  
+});
+
+
+function showNotification(message) {
+  playClickSound();
+  document.getElementById('clickSound').play();
+  const box = document.getElementById('notification');
+  box.textContent = message;
+  box.style.display = 'block'; box.style.animation = "slideFadeIn 0.3s ease forwards";
+  setTimeout(() => {
+    box.style.animation = "slideFadeOut 0.3s ease forwards"; setTimeout(() => { box.style.display = "none"; }, 300);
+  }, 2500);
+}
+
+document.getElementById('launchBtn').addEventListener('click', function() {
+  if (!walletConnected) {
+    showNotification('Please connect your wallet before launching the token.');
+    return;
+  }
+  showNotification('Launching token... (not implemented)');
+});
+
+
+function showNotification(message) {
+  playClickSound();
+  document.getElementById('clickSound').play();
+  const box = document.getElementById('notification');
+  const msg = document.getElementById('notif-message');
+  const bar = document.getElementById('notif-progress');
+  msg.textContent = message;
+  bar.style.width = '100%';
+  box.style.display = 'block'; box.style.animation = "slideFadeIn 0.3s ease forwards";
+  setTimeout(() => { bar.style.width = '0%'; }, 100);
+  setTimeout(() => { box.style.animation = "slideFadeOut 0.3s ease forwards"; setTimeout(() => { box.style.display = "none"; }, 300); }, 2600);
+}
+
+document.getElementById('launchBtn').addEventListener('click', function() {
+  if (!walletConnected) {
+    showNotification('Please connect your wallet before launching the token.');
+    return;
+  }
+  showNotification('Launching token... (not implemented)');
+});
+
+
+function playClickSound() {
+  const snd = document.getElementById('clickSound');
+  if (snd) snd.play().catch(() => {});
+}
+
+</script>
+
+
+<div id="notification" style="display:none;position:fixed;bottom:30px;left:50%;transform:translateX(-50%);
+background-color:#222;color:#fff;padding:1.25rem 2rem;font-size:1.1rem;border-radius:12px;
+box-shadow:0 0 15px rgba(0,0,0,0.3);z-index:1000;text-align:center;">
+  <div id="notif-message"></div>
+  <div style="margin-top:10px;width:100%;height:5px;background:#444;border-radius:5px;overflow:hidden;">
+    <div id="notif-progress" style="height:100%;width:100%;background:var(--primary);transition:width 2.5s linear;"></div>
+  </div>
+</div>
+</div>
+ </div>
+
+
+<div style="position:fixed;bottom:0;left:0;width:100%;height:6px;background:var(--primary);z-index:999;"></div>
+
+
+<audio id="clickSound" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_b52b49b56e.mp3?filename=click-124467.mp3" preload="auto"></audio>
+
+</body>
+</html>
